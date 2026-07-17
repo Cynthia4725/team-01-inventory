@@ -9,7 +9,7 @@
 | ธนวัฒน์ ขุนไชย | Thanawat407           | Developer |
 | รัชพงษ์ ปิดสาโย | Ratchapong-Pi      | Developer |
 | ณัฐภูมิ สร้อยคำ | godphum01             | Developer |
-|  | ...             | Developer |
+| ธีรนัย วงศ์คำนนท์ | Theeranai-Wo        | Developer |
 
 ## Branching Strategy
 
