@@ -4,12 +4,12 @@
 
 | ชื่อ | GitHub Username | บทบาท |
 |---|---|---|
-| ...  | ...             | Product Owner |
-| ...  | ...             | Scrum Master / Developer |
-| ...  | ...             | Developer |
-| ...  | ...             | Developer |
-| ...  | ...             | Developer |
-| ...  | ...             | Developer |
+| ก้องภพ สุวิมล | Cynthia4725             | Product Owner |
+| ธิรดา หลาวทอง | ...             | Scrum Master / Developer |
+| ธนวัฒน์ ขุนไชย | ...             | Developer |
+| รัชพงษ์ ปิดสาโย | ...             | Developer |
+| ณัฐภูมิ สร้อยคำ | ...             | Developer |
+|  | ...             | Developer |
 
 ## Branching Strategy
 
