@@ -8,7 +8,7 @@
 | ธิรดา หลาวทอง | Thirada   | Scrum Master / Developer |
 | ธนวัฒน์ ขุนไชย | Thanawat407           | Developer |
 | รัชพงษ์ ปิดสาโย | Ratchapong-Pi      | Developer |
-| ณัฐภูมิ สร้อยคำ | ...             | Developer |
+| ณัฐภูมิ สร้อยคำ | godphum01             | Developer |
 |  | ...             | Developer |
 
 ## Branching Strategy
