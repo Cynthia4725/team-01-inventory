@@ -7,7 +7,7 @@
 | ก้องภพ สุวิมล | Cynthia4725             | Product Owner |
 | ธิรดา หลาวทอง | ...             | Scrum Master / Developer |
 | ธนวัฒน์ ขุนไชย | ...             | Developer |
-| รัชพงษ์ ปิดสาโย | ...             | Developer |
+| รัชพงษ์ ปิดสาโย | Ratchapong-Pi      | Developer |
 | ณัฐภูมิ สร้อยคำ | ...             | Developer |
 |  | ...             | Developer |
 
