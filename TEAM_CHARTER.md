@@ -7,6 +7,9 @@
 | ...  | ...             | Product Owner |
 | ...  | ...             | Scrum Master / Developer |
 | ...  | ...             | Developer |
+| ...  | ...             | Developer |
+| ...  | ...             | Developer |
+| ...  | ...             | Developer |
 
 ## Branching Strategy
 
