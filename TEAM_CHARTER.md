@@ -5,8 +5,8 @@
 | ชื่อ | GitHub Username | บทบาท |
 |---|---|---|
 | ก้องภพ สุวิมล | Cynthia4725             | Product Owner |
-| ธิรดา หลาวทอง | ...             | Scrum Master / Developer |
-| ธนวัฒน์ ขุนไชย | ...             | Developer |
+| ธิรดา หลาวทอง | Thirada   | Scrum Master / Developer |
+| ธนวัฒน์ ขุนไชย | Thanawat407           | Developer |
 | รัชพงษ์ ปิดสาโย | Ratchapong-Pi      | Developer |
 | ณัฐภูมิ สร้อยคำ | ...             | Developer |
 |  | ...             | Developer |
