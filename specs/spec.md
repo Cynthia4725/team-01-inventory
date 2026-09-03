@@ -195,11 +195,13 @@ RamProduct
 - memoryChipManufacturer
 - memoryChipType
 - stockQuantity
-   8.2 RAM Serial Number
+
+  8.2 RAM Serial Number
    RamSerial
 - serialNumber
 - productId
 - status
+
    8.3 Chat Request
   ChatRequest
 - requestId
@@ -209,24 +211,3 @@ RamProduct
 - createdAt
 - assignedStaffId
 - responseDeadline
-## 9. Design Notes
-9.1 แยก Business Logic
-การตัดสต็อกต้องแยกออกจากส่วน UI และ Scanner โดยควรมี service กลาง เช่น
-InventoryService
-เพื่อให้ทั้ง POS และช่องทางอื่นเรียกใช้ business logic เดียวกัน
-ตัวอย่างแนวคิด:
-BarcodeScanner
-      |
-      v
-POS
-      |
-      v
-InventoryService
-      |
-      +----> ตรวจสอบ Serial Number
-      |
-      +----> ตรวจสอบสถานะสินค้า
-      |
-      +----> ตัด Stock
-      |
-      +----> Update Website
