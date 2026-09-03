@@ -195,14 +195,12 @@ RamProduct
 - memoryChipManufacturer
 - memoryChipType
 - stockQuantity
-- 
-8.2 RAM Serial Number
+   8.2 RAM Serial Number
    RamSerial
 - serialNumber
 - productId
 - status
-8.3 Chat Request
-  
+   8.3 Chat Request
   ChatRequest
 - requestId
 - userId
