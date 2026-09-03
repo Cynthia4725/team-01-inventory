@@ -1,11 +1,20 @@
 # AI Iteration Log
 
-## Iteration 1: Data Model & Project Structure
-- **Prompt:** สร้าง Class Diagram และโครงสร้าง JSON สำหรับเก็บข้อมูล RAM และ Serial Number ตาม Spec
-- **Output:** Mermaid diagram และ items.json
-- **Human Review & Edit:** ปรับเพิ่ม field `capacityGb` เป็น integer เพื่อให้เขียน logic เปรียบเทียบ `>= 64GB` ได้แม่นยำ
+## Iteration 1: แก้ไขเงื่อนไขการแจ้งเตือนสต็อกต่ำ (Low Stock Alert)
+- **ผลที่ผิด:** เมื่อตัดสต็อกแล้วสินค้าเหลือเท่ากับเกณฑ์พอดี (`stockQuantity == lowStockThreshold`) ระบบกลับส่งข้อความแจ้งเตือนสต็อกต่ำ ทั้งที่ตั้งใจให้แจ้งเฉพาะเมื่อ "ต่ำกว่าเกณฑ์" เท่านั้น
+- **สาเหตุ:** อยู่ที่ **Spec กำกวม** ใน `specs/spec.md` เดิมไม่ได้ระบุชัดเจนเรื่องขอบเขต (Boundary Case) ของค่า Threshold ทำให้ AI ตีความเป็น `<=` แทนที่จะเป็น `<`
+- **การแก้ที่ต้นทาง:** 
+  - เพิ่ม Scenario ใน `specs/spec.md` ภายใต้ US-02:
+    - เพิ่มเงื่อนไขชัดเจนว่า: *"Given สินค้ามีสต็อก 3 ชิ้น และ threshold = 2 | When ตัดสต็อกเหลือ 2 ชิ้น | Then ระบบต้องไม่ส่งการแจ้งเตือนสต็อกต่ำ"*
+    - ระบุใน Business Rule BR-03 ชัดเจนว่าแจ้งเตือนเฉพาะกรณี `stockQuantity < lowStockThreshold`
+- **ผลหลังแก้:** ให้ AI อ่าน Spec ใหม่แล้ว re-generate ฟังก์ชัน `sell_by_serial()` ผลลัพธ์คือเมื่อสต็อกเท่ากับ Threshold ระบบไม่แจ้งเตือน แต่ถ้าสต็อกต่ำกว่า (เช่น เหลือ 1 ชิ้น) ระบบจึงจะแจ้งเตือน ถูกต้องตามเกณฑ์
 
-## Iteration 2: Core Inventory Service
-- **Prompt:** สร้าง inventory.py เพื่อจัดการค้นหา RGB และตัดสต็อกด้วย Serial Number
-- **Output:** เมธอด `search_rgb_ram` และ `sell_by_serial`
-- **Human Review & Edit:** ตรวจสอบ edge case เรื่อง status "SOLD" และเพิ่มการลดจำนวน `stockQuantity` ควบคู่กันไป
+---
+
+## Iteration 2: แก้ไขการละเมิดกฎ Out of Scope แอบใช้ smtplib ส่งอีเมลแจ้งเตือน
+- **ผลที่ผิด:** AI มีการ import โมดูล `smtplib` ในโค้ดเพื่อพยายามส่งอีเมลแจ้งเตือนผู้ดูแลระบบเมื่อสต็อกสินค้าต่ำ
+- **สาเหตุ:** อยู่ที่ **Context ไม่ครอบคลุม** AI ไม่ทราบข้อจำกัดระดับโปรเจกต์ว่างานนี้เป็น CLI จำลอง ไม่มีการต่อเน็ตเวิร์กจริง
+- **การแก้ที่ต้นทาง:** 
+  - สร้างและอัปเดตไฟล์ `.ai-rules.md` โดยเพิ่มกฎข้อบังคับชัดเจน: *"ห้าม import หรือใช้งาน smtplib เด็ดขาด ให้จำลองการแจ้งเตือนผ่าน print() หรือ return ข้อความเท่านั้น"*
+  - สั่ง AI ปรับปรุงโค้ดโดยชี้กลับไปที่ `.ai-rules.md`
+- **ผลหลังแก้:** AI ตัดส่วน `smtplib` ออกทั้งหมด และเปลี่ยนมาใช้การพิมพ์ข้อความแจ้งเตือนผ่าน Console (Mock Alert) แทน ทำให้โค้ดสะอาดและไม่เกิดข้อผิดพลาดจาก Network
