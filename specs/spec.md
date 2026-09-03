@@ -211,3 +211,42 @@ RamProduct
 - createdAt
 - assignedStaffId
 - responseDeadline
+
+## 9. Design Notes
+9.1 แยก Business Logic
+
+การตัดสต็อกต้องแยกออกจากส่วน UI และ Scanner โดยควรมี service กลาง เช่น
+
+InventoryService
+เพื่อให้ทั้ง POS และช่องทางอื่นเรียกใช้ business logic เดียวกัน
+
+ตัวอย่างแนวคิด:
+
+BarcodeScanner
+      |
+      v
+POS
+      |
+      v
+InventoryService
+      |
+      +----> ตรวจสอบ Serial Number
+      |
+      +----> ตรวจสอบสถานะสินค้า
+      |
+      +----> ตัด Stock
+      |
+      +----> Update Website
+
+9.2 แยก RGB Sync เป็นข้อมูลที่ขยายได้
+
+ไม่ควร hard-code เงื่อนไข RGB Sync ไว้ใน business logic เช่น
+if brand == "ASUS":
+    ...
+
+แต่ควรออกแบบให้สินค้าเก็บรายการระบบ RGB Sync ที่รองรับ เช่น
+
+rgbSyncSystems = [
+    "ASUS Aura Sync",
+    "MSI Mystic Light"
+]
