@@ -18,3 +18,13 @@
   - สร้างและอัปเดตไฟล์ `.ai-rules.md` โดยเพิ่มกฎข้อบังคับชัดเจน: *"ห้าม import หรือใช้งาน smtplib เด็ดขาด ให้จำลองการแจ้งเตือนผ่าน print() หรือ return ข้อความเท่านั้น"*
   - สั่ง AI ปรับปรุงโค้ดโดยชี้กลับไปที่ `.ai-rules.md`
 - **ผลหลังแก้:** AI ตัดส่วน `smtplib` ออกทั้งหมด และเปลี่ยนมาใช้การพิมพ์ข้อความแจ้งเตือนผ่าน Console (Mock Alert) แทน ทำให้โค้ดสะอาดและไม่เกิดข้อผิดพลาดจาก Network
+---
+
+## Iteration 3: Refactor ด้วย Factory + Observer เพื่อแก้ SOLID (OCP & DIP)
+- **ผลที่ผิด:** `InventoryService` ผูกติดกับการแสดงผลผ่าน Console ตรง ๆ ทำให้ไม่สามารถเพิ่มช่องทางการแจ้งเตือนอื่นได้โดยไม่แก้ Business Logic เดิม
+- **สาเหตุ:** สถาปัตยกรรมเดิมขาด Abstraction Layer สำหรับ Notification และละเมิด Dependency Inversion Principle
+- **การแก้ที่ต้นทาง:** 
+  - สร้าง `BaseNotifier` interface และแตก subclass เป็น `ConsoleNotifier` และ `LogNotifier`
+  - สร้าง `NotifierFactory` เพื่อจัดการการสร้าง Object ตามชื่อช่องทาง
+  - ปรับปรุง `InventoryService` ให้รับ Observers ผ่าน Constructor และเรียก `notify_all()` เมื่อสต็อกต่ำกว่าเกณฑ์
+- **ผลหลังแก้:** Business Logic การตัดสต็อกยังคงถูกต้องตาม Spec เดิม และระบบรองรับการขยายช่องทางแจ้งเตือนใหม่ได้ทันทีโดยไม่ต้องแก้ `InventoryService`
