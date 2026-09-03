@@ -1,75 +1,68 @@
-from inventory import InventoryService
-
-def print_table(products):
-    if not products:
-        print(">> ไม่พบสินค้าที่ตรงกับเงื่อนไข <<")
-        return
-    print("-" * 75)
-    print(f"{'รหัส':<10} | {'ชื่อสินค้า':<32} | {'ความจุ':<6} | {'RGB':<5} | {'คงเหลือ'}")
-    print("-" * 75)
-    for p in products:
-        rgb_tag = "มี" if p.get("hasRgb") else "ไม่มี"
-        print(f"{p['productId']:<10} | {p['productName'][:30]:<32} | {p['capacityGb']}GB   | {rgb_tag:<5} | {p['stockQuantity']} ชิ้น")
-    print("-" * 75)
+from inventory import InventoryService, NotifierFactory
 
 def main():
-    service = InventoryService()
+    # สร้าง Notifier ด้วย Factory Pattern และส่งเข้า Service (DIP + Observer)
+    console_observer = NotifierFactory.create("console")
+    log_observer = NotifierFactory.create("log")
+    
+    inv_service = InventoryService(observers=[console_observer, log_observer])
+
     while True:
-        print("\n=========================================")
-        print("   ระบบจัดการและค้นหา RAM (Command Line)   ")
-        print("=========================================")
-        print("1. [US-01] กรองหา RAM ที่มีไฟ RGB และระบบ Sync")
-        print("2. [US-02] สแกน Serial Number เพื่อตัดสต็อกหน้าร้าน (POS)")
-        print("3. [US-04] กรอง RAM แบบ Kit (ความจุ 64GB ขึ้นไป)")
-        print("4. [US-05] ดูข้อมูลเชิงลึก (Advanced Tech Specs)")
+        print("\n==========================================")
+        print("   ระบบสต็อกและค้นหา RAM (Computer Shop)   ")
+        print("==========================================")
+        print("1. ค้นหา RAM ตามเงื่อนไข RGB / Sync (US-01)")
+        print("2. ขายหน้าร้านด้วย Serial Number + ตรวจสอบสต็อกต่ำ (US-02)")
+        print("3. ส่งรูปภาพปรึกษาผู้เชี่ยวชาญ (US-03)")
+        print("4. กรอง RAM แบบ Kit ความจุ 64GB ขึ้นไป (US-04)")
+        print("5. ดูสเปกเชิงลึก Advanced Tech Specs (US-05)")
         print("0. ออกจากโปรแกรม")
-        choice = input("เลือกเมนู (0-4): ").strip()
+        choice = input("เลือกเมนู: ").strip()
 
         if choice == "1":
-            print("\n--- ค้นหา RAM RGB ---")
-            sync = input("ระบุระบบ Sync ที่ต้องการ (เช่น ASUS Aura Sync / กด Enter หากไม่ระบุ): ").strip()
-            brand = input("ระบุแบรนด์ (เช่น Corsair, ASUS / กด Enter หากไม่ระบุ): ").strip()
-            results = service.search_rgb_ram(sync_system=sync if sync else None, brand=brand if brand else None)
-            print_table(results)
+            rgb_in = input("ต้องการไฟ RGB หรือไม่? (y/n): ").strip().lower() == 'y'
+            sync_in = input("ระบุระบบ Sync (เช่น ASUS Aura Sync, กด Enter ถ้าไม่ระบุ): ").strip()
+            items = inv_service.filter_ram(require_rgb=rgb_in, sync_system=sync_in if sync_in else None)
+            if not items:
+                print(">> ไม่พบสินค้าที่ตรงกับเงื่อนไข")
+            else:
+                for idx, it in enumerate(items, 1):
+                    print(f"{idx}. {it['productName']} | Sync: {', '.join(it['rgbSyncSystems'])} | คงเหลือ: {it['stockQuantity']}")
 
         elif choice == "2":
-            print("\n--- สแกน Serial Number หน้าร้าน ---")
-            sn = input("กรุณายิง/พิมพ์ Serial Number: ").strip()
-            confirm = input(f"ยืนยันการขาย Serial '{sn}' หรือไม่? (y/n): ").strip().lower()
-            if confirm == "y":
-                success, msg = service.sell_by_serial(sn)
-                print("ผลการทำงาน:", msg)
-            else:
-                print("ยกเลิกรายการขาย")
+            sn = input("สแกน/กรอก Serial Number: ").strip()
+            success, msg, alert = inv_service.sell_by_serial(sn)
+            print(f">> ผลการทำงาน: {msg}")
 
         elif choice == "3":
-            print("\n--- รายการ RAM แบบ Kit ความจุรวม >= 64GB ---")
-            results = service.filter_kits(min_capacity_gb=64)
-            print_table(results)
+            uid = input("User ID ของคุณ: ").strip()
+            img = input("ระบุชื่อไฟล์รูปภาพ: ").strip()
+            online = input("จำลองสถานะมีพนักงานออนไลน์หรือไม่? (y/n): ").strip().lower() == 'y'
+            _, res = inv_service.submit_chat_request(uid, img, staff_online=online)
+            print(f">> {res}")
 
         elif choice == "4":
-            print("\n--- ข้อมูลทางเทคนิคเชิงลึก (Advanced Tech Specs) ---")
-            pid = input("ระบุ Product ID (เช่น RAM-001): ").strip()
-            specs = service.get_advanced_specs(pid)
-            if not specs:
-                print(">> ไม่พบสินค้ารหัสนี้ <<")
+            items = inv_service.filter_ram(package_type="KIT", min_capacity=64)
+            if not items:
+                print(">> ไม่พบ RAM แบบ Kit ที่มีความจุ 64GB ขึ้นไป")
             else:
-                print("\n" + "=" * 45)
-                print(f"สินค้า: {specs['productName']}")
-                print("=" * 45)
-                print(f"Timing         : {specs['timing']}")
-                print(f"Voltage        : {specs['voltage']}")
-                print(f"Memory Chip Mfr: {specs['chipManufacturer']}")
-                print(f"Memory Chip Typ: {specs['chipType']}")
-                print(f"Speed          : {specs['speed']}")
-                print(f"Package Type   : {specs['package']}")
-                print("=" * 45)
+                for idx, it in enumerate(items, 1):
+                    print(f"{idx}. {it['productName']} ({it['capacity']}GB Kit) | คงเหลือ: {it['stockQuantity']}")
+
+        elif choice == "5":
+            items = inv_service.filter_ram()
+            for idx, it in enumerate(items, 1):
+                print(f"[{idx}] {it['productName']}")
+            sel = input("เลือกลำดับสินค้า: ").strip()
+            if sel.isdigit() and 1 <= int(sel) <= len(items):
+                target = items[int(sel) - 1]
+                print(f"\n--- Advanced Tech Specs: {target['productName']} ---")
+                print(f"Timing      : {target.get('timing') or 'ไม่มีข้อมูล'}")
+                print(f"Voltage     : {target.get('voltage') or 'ไม่มีข้อมูล'}")
+                print(f"Memory Chip : {target.get('memoryChipManufacturer') or 'ไม่มีข้อมูล'} {target.get('memoryChipType') or ''}".strip() or 'ไม่มีข้อมูล')
 
         elif choice == "0":
-            print("ปิดโปรแกรม สวัสดีครับ")
             break
-        else:
-            print("ตัวเลือกไม่ถูกต้อง กรุณาเลือกใหม่")
 
 if __name__ == "__main__":
     main()
