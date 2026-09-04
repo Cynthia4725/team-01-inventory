@@ -215,13 +215,13 @@ RamProduct
 ## 9. Design Notes
 9.1 แยก Business Logic
 
-การตัดสต็อกต้องแยกออกจากส่วน UI และ Scanner โดยควรมี service กลาง เช่น
+การตัดสต็อกต้องแยกออกจากส่วน UI และ Scanner โดยควรมี service กลาง เช่น InventoryService
 
-InventoryService
 เพื่อให้ทั้ง POS และช่องทางอื่นเรียกใช้ business logic เดียวกัน
 
 ตัวอย่างแนวคิด:
 
+```python
 BarcodeScanner
       |
       v
@@ -237,16 +237,132 @@ InventoryService
       +----> ตัด Stock
       |
       +----> Update Website
+```
 
 9.2 แยก RGB Sync เป็นข้อมูลที่ขยายได้
 
 ไม่ควร hard-code เงื่อนไข RGB Sync ไว้ใน business logic เช่น
+```python
 if brand == "ASUS":
     ...
+```
 
 แต่ควรออกแบบให้สินค้าเก็บรายการระบบ RGB Sync ที่รองรับ เช่น
-
+```python
 rgbSyncSystems = [
     "ASUS Aura Sync",
     "MSI Mystic Light"
 ]
+```
+เพื่อให้สามารถเพิ่มระบบใหม่ในอนาคตได้โดยไม่ต้องแก้ business logic หลัก
+
+9.3 แยก Notification จาก Business Logic
+
+ระบบแจ้งเตือนพนักงานควรแยกเป็น service เช่น NotificationService
+
+เพื่อให้ในอนาคตสามารถเพิ่มช่องทางได้ เช่น
+```python
+NotificationService
+    |
+    +-- WebNotification
+    +-- EmailNotification
+    +-- SMSNotification
+```
+โดย business logic ของ Chat ไม่ควรผูกติดกับวิธีการส่ง notification
+
+9.4 แยก Chat Service
+
+ระบบแชทควรแยกออกจากระบบสินค้าและสต็อก เช่น ChatService
+
+หน้าที่หลัก:
+
+- รับคำขอจาก user
+- รับรูปภาพ
+- ค้นหาพนักงานออนไลน์
+- assign คำขอให้พนักงาน
+- แจ้งเตือนพนักงาน
+- ติดตาม response deadline
+
+9.5 Inventory Consistency
+
+POS และเว็บไซต์ต้องไม่จัดการจำนวน Stock แยกกัน
+
+ควรมีแหล่งข้อมูลกลาง เช่น
+```python
+             +----------------+
+             | InventoryService|
+             +--------+-------+
+                      |
+             +--------+--------+
+             |                 |
+            POS             Website
+```
+
+เมื่อมีการขายหน้าร้าน:
+```python
+Scan Serial
+    |
+    v
+Validate Serial
+    |
+    v
+Confirm Sale
+    |
+    v
+Decrease Stock
+    |
+    v
+Update Website
+```
+
+## 10. ตัวอย่าง User Flow
+
+Flow 1: ค้นหา RGB RAM
+```python
+user
+  |
+  v
+หน้าค้นหา RAM
+  |
+  v
+เลือก RGB Sync
+  |
+  v
+เลือก ASUS
+  |
+  v
+ระบบกรองสินค้า
+  |
+  v
+แสดง RAM ที่มี RGB
+และรองรับ ASUS Aura Sync
+```
+
+Flow 2: ขาย RAM หน้าร้าน
+```python
+user (พนักงาน)
+  |
+  v
+POS
+  |
+  v
+Scan Serial Number
+  |
+  v
+ตรวจสอบ Serial Number
+  |
+  +---- ไม่พบ ----> แจ้ง Error
+  |
+  v
+ตรวจสอบสถานะ
+  |
+  +---- SOLD ----> แจ้ง Error
+  |
+  v
+ยืนยันการขาย
+  |
+  v
+ตัด Stock
+  |
+  v
+Update Website
