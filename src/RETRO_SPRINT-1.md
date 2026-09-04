@@ -30,3 +30,4 @@
 | ออกแบบ Data Structure และ Interface สำหรับ US-04 (RAM Kit) และ US-05 ลงใน spec.md | (Ratchapong) |
 | สร้าง Test Suite สำหรับตรวจ Edge Cases ของการตัดสต็อกก่อนเปิด PR | (Thanawat) |
 
+<img width="1522" height="811" alt="image" src="https://github.com/user-attachments/assets/e0446124-ff26-49a9-aca4-ec4b2bf154e4" />
