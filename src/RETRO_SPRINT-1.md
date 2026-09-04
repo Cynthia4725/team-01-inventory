@@ -24,3 +24,9 @@
 
 ## AI Commit Audit
 - **PR #3:** Draft commit message จาก AI เขียนว่า `feat: update inventory` สั้นเกินไป ได้แก้เป็น `feat: เพิ่มฟังก์ชัน sell_by_serial() สำหรับตัดสต็อกตาม US-02` เพื่อให้ตรงกับ Acceptance Criteria
+## Action Item สำหรับ Sprint ถัดไป
+| Action | เจ้าของ |
+|---|---|
+| ออกแบบ Data Structure และ Interface สำหรับ US-04 (RAM Kit) และ US-05 ลงใน spec.md | (Ratchapong) |
+| สร้าง Test Suite สำหรับตรวจ Edge Cases ของการตัดสต็อกก่อนเปิด PR | (Thanawat) |
+
