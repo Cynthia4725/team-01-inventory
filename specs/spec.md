@@ -467,3 +467,4 @@ Advanced Tech Specs
 - - [ ] ระบบแสดง "ไม่มีข้อมูล" เมื่อข้อมูลเชิงลึกไม่มีอยู่จริง
 - - [ ] ระบบสามารถเพิ่ม RGB Sync provider ใหม่ได้โดยไม่กระทบ business logic หลัก
 - - [ ] ระบบมีการแยก Inventory, Notification และ Chat ออกจากกัน
+  
