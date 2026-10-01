@@ -2,7 +2,7 @@
 
 ## ขั้นที่ 2: Review Comments
 
-### 1. sell_batch() — บรรทัด 20-25
+### 1. sell_batch() 
 
 **[sell_batch] correctness/medium**
 
@@ -14,7 +14,7 @@
 
 ---
 
-### 2. reserve() — บรรทัด 30-37
+### 2. reserve()
 
 **[reserve] correctness/medium**
 
@@ -26,7 +26,7 @@
 
 ---
 
-### 3. items_in_price_range() — บรรทัด 40-46
+### 3. items_in_price_range()
 
 **[items_in_price_range] correctness/medium**
 
@@ -38,7 +38,7 @@
 
 ---
 
-### 4. low_stock_report() — บรรทัด 49-53
+### 4. low_stock_report()
 
 **[low_stock_report] correctness/medium**
 
@@ -50,7 +50,7 @@
 
 ---
 
-### 5. concurrent_restock() — บรรทัด 56-62
+### 5. concurrent_restock()
 
 **[concurrent_restock] concurrency/high**
 
@@ -62,7 +62,7 @@
 
 ---
 
-### 6. average_unit_value() — บรรทัด 65-68
+### 6. average_unit_value()
 
 **[average_unit_value] correctness/medium**
 
