@@ -4,7 +4,7 @@
 **สมาชิกในทีม:**
 1. Cynthia4725 (Product Owner)
 2. Thirada (Scrum Master)
-3. Thanawat407 (Developer - นายธนวรรธน์ 67332110040-7)
+3. Thanawat407 (Developer - นายธนวัฒน์ 67332110040-7)
 4. Ratchapong-Pi (Developer)
 
 **ระบบที่อ้างอิง:** ระบบจัดการสินค้าคงคลังและการคำนวณราคา (`team-01-inventory`)
